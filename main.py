@@ -1,10 +1,12 @@
-from fastapi import Depends,FastAPI, Body, Path, Query,HTTPException, Request
+from fastapi import Depends,FastAPI, Path, Query,HTTPException, Request
 from fastapi.responses import HTMLResponse,JSONResponse
 from fastapi.security import HTTPBearer
 from pydantic import BaseModel,Field
 from typing import Optional,List
 import datetime
 from jwt_manager import create_token,validate_token
+from config.database import Session,engine,Base
+from models.movie import Movie
 
 
 app = FastAPI(title= 'Mi aplicacion con FastAPI')
@@ -12,6 +14,8 @@ app = FastAPI(title= 'Mi aplicacion con FastAPI')
 app.title = "Mi FastAPI"
 # cambiar la version 
 app.version = "0.0.2"
+
+Base.metadata.create_all(bind=engine)
 
 class User(BaseModel):
     email:str
